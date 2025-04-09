@@ -3,6 +3,7 @@ package org.iftm.tds.entities;
 
 import java.io.Serializable;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,11 +15,17 @@ public class Client implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false, length = 100)
     private Long id;
+    @Column(name = "client_name", nullable = false, length = 100)
     private String name;
+    @Column(name = "cpf", nullable = false, length = 100)
     private String cpf;
+    @Column(name = "quantidade_animais", nullable = false, length = 100)
     private Integer qtdAnimals;
+    @Column(name = "telefone", nullable = false, length = 100)
     private Integer telefone;
+    @Column(name = "endereco", nullable = false, length = 100)
     private Integer endereco;
     
 // Construtores, getters e setters
