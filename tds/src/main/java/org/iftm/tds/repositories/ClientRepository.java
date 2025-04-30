@@ -7,4 +7,6 @@ package org.iftm.tds.repositories;
  
  @Repository
  public interface ClientRepository extends JpaRepository<Client, Long>{
+  
+
  }

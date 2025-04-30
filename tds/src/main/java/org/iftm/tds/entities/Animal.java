@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+
 @Entity
 @Table(name = "tb_animal")
 public class Animal implements Serializable {
@@ -34,17 +35,22 @@ public class Animal implements Serializable {
     @Column(name = "foto", length = 255)
     private String foto;
 
+    @Column(name = "idade", nullable = false)
+    private Integer idade;
+
     // Construtores
     public Animal() {
     }
 
-    public Animal(Long id, String nome, String raca, String pelagem, Double peso, String foto) {
+    public Animal(Long id, String nome, String raca, String pelagem, Double peso, String foto, Integer idade) {
         this.id = id;
         this.nome = nome;
         this.raca = raca;
         this.pelagem = pelagem;
         this.peso = peso;
         this.foto = foto;
+        this.idade = idade;
+
     }
 
     // Getters e Setters
@@ -94,5 +100,13 @@ public class Animal implements Serializable {
 
     public void setFoto(String foto) {
         this.foto = foto;
+    }
+
+    public Integer getIdade() {
+        return idade;
+    }
+    
+    public void setIdade(Integer idade) {
+        this.idade = idade;
     }
 }
