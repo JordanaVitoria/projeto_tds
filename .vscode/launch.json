@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-TdsApplication<tds>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "org.iftm.tds.TdsApplication",
+            "projectName": "tds",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

@@ -31,4 +31,48 @@ public class AnimalService {
         }
         return animalRepository.findByNomeOrRaca(nome, raca);
     }
+
+    // Validação
+    private void validarAnimal(Animal animal) {
+        if (animal == null) {
+            throw new IllegalArgumentException("Animal não pode ser nulo.");
+        }
+        if (animal.getNome() == null || animal.getNome().trim().isEmpty()) {
+            throw new IllegalArgumentException("Nome do animal é obrigatório.");
+        }
+        if (animal.getRaca() == null || animal.getRaca().trim().isEmpty()) {
+            throw new IllegalArgumentException("Raça do animal é obrigatória.");
+        }
+    }
+
+    // Criar novo animal
+    public Animal criarAnimal(Animal animal) {
+        validarAnimal(animal); // Validando dados obrigatórios
+        return animalRepository.save(animal);
+    }
+
+    // Atualizar animal
+    public Animal atualizarAnimal(Long id, Animal animal) {
+        Animal animalExistente = animalRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Animal não encontrado: " + id));
+
+        validarAnimal(animal); // Valida dados de entrada
+
+        animalExistente.setNome(animal.getNome());
+        animalExistente.setRaca(animal.getRaca());
+        animalExistente.setPelagem(animal.getPelagem());
+        animalExistente.setPeso(animal.getPeso());
+        animalExistente.setFoto(animal.getFoto());
+        animalExistente.setIdade(animal.getIdade());
+
+        return animalRepository.save(animalExistente);
+    }
+
+    // Deletar animal
+    public void deletarAnimal(Long id) {
+        if (!animalRepository.existsById(id)) {
+            throw new IllegalArgumentException("Animal com ID " + id + " não encontrado.");
+        }
+        animalRepository.deleteById(id);
+    }
 }
