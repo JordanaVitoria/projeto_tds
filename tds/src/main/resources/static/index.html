@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Buscar Animal</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+
+        .input-container {
+            margin-bottom: 20px;
+        }
+
+        label {
+            margin-right: 10px;
+        }
+
+        input {
+            padding: 5px;
+            width: 200px;
+        }
+
+        button {
+            padding: 5px 10px;
+        }
+
+        #animal-details {
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin-top: 20px;
+            max-width: 400px;
+            background-color: #f9f9f9;
+        }
+
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Buscar Animal por ID</h1>
+
+    <div class="input-container">
+        <label for="animal-id">Digite o ID do animal:</label>
+        <input type="number" id="animal-id" placeholder="Ex: 1" min="1">
+        <button onclick="buscarAnimal()">Buscar</button>
+    </div>
+
+    <div id="animal-details"></div>
+
+    <script>
+        async function buscarAnimal() {
+            const id = document.getElementById('animal-id').value;
+            const detalhes = document.getElementById('animal-details');
+            detalhes.innerHTML = ""; // limpa antes
+
+            if (!id) {
+                alert("Digite um ID válido.");
+                return;
+            }
+
+            const url = `http://localhost:8080/animais/${id}`;
+
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`Erro na requisição: ${response.status} ${response.statusText}`);
+                }
+
+                const animal = await response.json();
+
+                detalhes.innerHTML = `
+                    <h2>Detalhes do Animal</h2>
+                    <p><strong>Nome:</strong> ${animal.nome}</p>
+                    <p><strong>Raça:</strong> ${animal.raca}</p>
+                    <p><strong>Pelagem:</strong> ${animal.pelagem || 'Não informado'}</p>
+                    <p><strong>Peso:</strong> ${animal.peso || 'Não informado'} kg</p>
+                    <p><strong>Idade:</strong> ${animal.idade || 'Não informada'} anos</p>
+                    <p><strong>Foto:</strong> ${animal.foto ? `<img src="${animal.foto}" alt="Foto do animal" width="100">` : 'Sem foto'}</p>
+                `;
+            } catch (error) {
+                console.error("Erro ao buscar o animal:", error);
+                detalhes.innerHTML = `
+                    <p class="error">Erro ao carregar os dados.</p>
+                    <p class="error">Detalhes: ${error.message}</p>
+                `;
+            }
+        }
+    </script>
+</body>
+
+</html>

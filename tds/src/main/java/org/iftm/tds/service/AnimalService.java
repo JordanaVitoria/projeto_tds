@@ -75,4 +75,8 @@ public class AnimalService {
         }
         animalRepository.deleteById(id);
     }
+    public Animal buscarPorId(Long id) {
+    return animalRepository.findById(id).orElse(null);
 }
+
+}     

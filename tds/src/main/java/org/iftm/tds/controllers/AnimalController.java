@@ -63,4 +63,15 @@ public class AnimalController {
         animalService.deletarAnimal(id);
         return ResponseEntity.noContent().build();
     }
+    // Endpoint para buscar animal por ID
+    @GetMapping("/{id}")
+    public ResponseEntity<Animal> buscarPorId(@PathVariable Long id) {
+        Animal animal = animalService.buscarPorId(id);
+        if (animal != null) {
+            return ResponseEntity.ok(animal);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }
