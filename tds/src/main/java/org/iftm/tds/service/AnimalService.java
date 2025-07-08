@@ -14,25 +14,26 @@ public class AnimalService {
     @Autowired
     private AnimalRepository animalRepository;
 
-    // Buscar por nome E raça
+    // Consulta por nome E espécie (raça)
     @Transactional(readOnly = true)
-    public List<Animal> buscarPorNomeERaca(String nome, String raca) {
-        if (nome == null || nome.trim().isEmpty() || raca == null || raca.trim().isEmpty()) {
-            throw new IllegalArgumentException("Nome e raça devem ser preenchidos.");
+public List<Animal> buscarPorNomeEEspecie(String nome, String especieNome) {
+    if (nome == null || nome.trim().isEmpty() || especieNome == null || especieNome.trim().isEmpty()) {
+        throw new IllegalArgumentException("Nome e espécie devem ser preenchidos.");
+    }
+    return animalRepository.findByNomeAndEspecieNome(nome, especieNome);
+}
+
+
+    // Consulta por nome OU espécie (raça)
+    @Transactional(readOnly = true)
+    public List<Animal> buscarPorNomeOuEspecie(String nome, String especieNome) {
+        if ((nome == null || nome.trim().isEmpty()) && (especieNome == null || especieNome.trim().isEmpty())) {
+            throw new IllegalArgumentException("Pelo menos nome ou espécie devem ser preenchidos.");
         }
-        return animalRepository.findByNomeAndRaca(nome, raca);
+        return animalRepository.findByNomeOrEspecieNome(nome, especieNome);
     }
 
-    // Buscar por nome OU raça
-    @Transactional(readOnly = true)
-    public List<Animal> buscarPorNomeOuRaca(String nome, String raca) {
-        if ((nome == null || nome.trim().isEmpty()) && (raca == null || raca.trim().isEmpty())) {
-            throw new IllegalArgumentException("Pelo menos nome ou raça devem ser preenchidos.");
-        }
-        return animalRepository.findByNomeOrRaca(nome, raca);
-    }
-
-    // Validação
+    // Validação de campos obrigatórios
     private void validarAnimal(Animal animal) {
         if (animal == null) {
             throw new IllegalArgumentException("Animal não pode ser nulo.");
@@ -40,26 +41,28 @@ public class AnimalService {
         if (animal.getNome() == null || animal.getNome().trim().isEmpty()) {
             throw new IllegalArgumentException("Nome do animal é obrigatório.");
         }
-        if (animal.getRaca() == null || animal.getRaca().trim().isEmpty()) {
-            throw new IllegalArgumentException("Raça do animal é obrigatória.");
+        if (animal.getEspecie() == null) {
+            throw new IllegalArgumentException("Espécie do animal é obrigatória.");
         }
     }
 
-    // Criar novo animal
+    // Inserção de um animal com validação
+    @Transactional
     public Animal criarAnimal(Animal animal) {
-        validarAnimal(animal); // Validando dados obrigatórios
+        validarAnimal(animal);
         return animalRepository.save(animal);
     }
 
-    // Atualizar animal
+    // Atualização de dados de um animal existente
+    @Transactional
     public Animal atualizarAnimal(Long id, Animal animal) {
         Animal animalExistente = animalRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("Animal não encontrado: " + id));
 
-        validarAnimal(animal); // Valida dados de entrada
+        validarAnimal(animal);
 
         animalExistente.setNome(animal.getNome());
-        animalExistente.setRaca(animal.getRaca());
+        animalExistente.setEspecie(animal.getEspecie());
         animalExistente.setPelagem(animal.getPelagem());
         animalExistente.setPeso(animal.getPeso());
         animalExistente.setFoto(animal.getFoto());
@@ -68,15 +71,42 @@ public class AnimalService {
         return animalRepository.save(animalExistente);
     }
 
-    // Deletar animal
+    // Remoção de um animal por ID
+    @Transactional
     public void deletarAnimal(Long id) {
         if (!animalRepository.existsById(id)) {
             throw new IllegalArgumentException("Animal com ID " + id + " não encontrado.");
         }
         animalRepository.deleteById(id);
     }
-    public Animal buscarPorId(Long id) {
-    return animalRepository.findById(id).orElse(null);
-}
 
-}     
+    // Consulta por ID
+    @Transactional(readOnly = true)
+    public Animal buscarPorId(Long id) {
+        return animalRepository.findById(id).orElse(null);
+    }
+
+    // Retorna todos os animais
+    @Transactional(readOnly = true)
+    public List<Animal> listarTodos() {
+        return animalRepository.findAll();
+    }
+
+    // Consulta por idade maior que
+    @Transactional(readOnly = true)
+    public List<Animal> buscarPorIdadeMaiorQue(int idade) {
+        return animalRepository.findByIdadeGreaterThan(idade);
+    }
+
+    // Consulta por intervalo de idades
+    @Transactional(readOnly = true)
+    public List<Animal> buscarPorIdadeEntre(int min, int max) {
+        return animalRepository.findByIdadeBetween(min, max);
+    }
+
+    // Consulta por espécie (raça) e idade mínima
+    @Transactional(readOnly = true)
+    public List<Animal> buscarPorEspecieEIdadeMinima(String especieNome, int idade) {
+        return animalRepository.findByEspecieNomeAndIdadeGreaterThanEqual(especieNome, idade);
+    }
+}
