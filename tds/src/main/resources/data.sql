@@ -1,17 +1,17 @@
--- Inserts para tb_especie (10 espécies)
-INSERT INTO tb_especie (id, nome) VALUES 
-(1, 'Cachorro'),
-(2, 'Gato'),
-(3, 'Coelho'),
-(4, 'Pássaro'),
-(5, 'Peixe'),
-(6, 'Hamster'),
-(7, 'Cavalo'),
-(8, 'Porquinho-da-índia'),
-(9, 'Tartaruga'),
-(10, 'Lagarto');
+-- Inserts para tb_especie (sem especificar ID, pois é autogerado)
+INSERT INTO tb_especie (nome) VALUES 
+('Cachorro'),
+('Gato'),
+('Coelho'),
+('Pássaro'),
+('Peixe'),
+('Hamster'),
+('Cavalo'),
+('Porquinho-da-índia'),
+('Tartaruga'),
+('Lagarto');
 
--- Inserts para tb_animal (50 animais com relação à espécie)
+-- Inserts para tb_animal (usando os IDs correspondentes das espécies inseridas acima)
 INSERT INTO tb_animal (nome, pelagem, peso, foto, idade, especie_id) VALUES 
 ('Bidu', 'Encaracolada', 8.5, 'bidu.jpg', 4, 1),
 ('Rex', 'Curta', 25.0, 'rex.jpg', 6, 1),
